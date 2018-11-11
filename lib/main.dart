@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'dart:typed_data';
-import 'dart:ui' as ui;
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'dart:io';
 
@@ -13,7 +10,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-      title: 'Flutter Demo',
+      title: 'ScreenGrab Text',
       theme: new ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -32,14 +29,26 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   static GlobalKey previewContainer = new GlobalKey();
-  Uint8List screenShot;
-  String detectedText= '';
+  String screenShotPath = '';
+  String detectedText = '';
+  static const platform = const MethodChannel('com.inlogica.screengrabtext/takeshot');
+
+  _showNotification() {
+    platform.invokeMethod('startProjection');
+    platform.setMethodCallHandler((MethodCall call) async {
+      if(call.method=='onScreenShot') {
+        print('location, ${call.arguments}');
+        detectText(call.arguments);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     var screenShotWid;
-    if(screenShot != null){
-      screenShotWid = new Image.memory(screenShot);
+    if(screenShotPath != ''){
+      File imgFile = new File(screenShotPath);
+      screenShotWid = new Image.file(imgFile);
     } else {
       screenShotWid = new Text('No Image');
     }
@@ -57,7 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             new RaisedButton(
-                onPressed: takeScreenShot,
+                onPressed: _showNotification,
               child: const Text('Take a Screenshot'),
             ),
             new Container(child: screenShotWid,
@@ -71,36 +80,14 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  // getPermissionStatus() async {
-  //   List<Permissions> permissions = await Permission.getPermissionStatus([PermissionName.Storage]);
-  //   permissions.forEach((permission) {
-  //     if(permission.permissionStatus.toString() =='PermissionStatus.noAgain' ||  permission.permissionStatus.toString() =='PermissionStatus.deny'){
-  //       requestPermission(permission);
-  //     }
-  //   });
-  // }
-
-  // requestPermission(permission) async {
-  //   await Permission.requestSinglePermission(PermissionName.Storage);
-  // }
-
-  takeScreenShot() async{
-    RenderRepaintBoundary boundary = previewContainer.currentContext.findRenderObject();
-    ui.Image image = await boundary.toImage();
+  detectText(String imagePath) async{
     //getPermissionStatus();
-    final directory = (await getApplicationDocumentsDirectory()).path;
-    var now = new DateTime.now();
-    var fileName= "screenshot"+now.millisecondsSinceEpoch.toString()+".png";
-    File imgFile =new File('$directory/$fileName');
-    ByteData byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-    Uint8List pngBytes = byteData.buffer.asUint8List();
-    await imgFile.writeAsBytes(pngBytes);
-    final FirebaseVisionImage visionImage = FirebaseVisionImage.fromFile(imgFile);
+    final FirebaseVisionImage visionImage = FirebaseVisionImage.fromFilePath(imagePath);
     final TextRecognizer textRecognizer = FirebaseVision.instance.textRecognizer();
     final VisionText visionText = await textRecognizer.processImage(visionImage);
     String text = visionText.text;
     setState(() {
-      screenShot=pngBytes;
+      screenShotPath = screenShotPath;
       detectedText = text;
     });
     print('text detect:'+ text);

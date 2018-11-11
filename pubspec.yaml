@@ -13,7 +13,6 @@ environment:
   sdk: ">=2.0.0-dev.68.0 <3.0.0"
 
 dependencies:
-  path_provider: ^0.4.1
   firebase_ml_vision: ^0.2.0+1
   flutter:
     sdk: flutter
