@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'dart:io';
@@ -32,6 +31,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String screenShotPath = '';
   String detectedText = '';
   static const platform = const MethodChannel('com.inlogica.screengrabtext/takeshot');
+  TextEditingController txt = new TextEditingController();
 
   _showNotification() {
     platform.invokeMethod('startProjection');
@@ -60,37 +60,46 @@ class _MyHomePageState extends State<MyHomePage> {
 
         title: new Text(widget.title),
       ),
-      body: new Center(
+      body: new Container(
         child: new Column(
-
-          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             new RaisedButton(
                 onPressed: _showNotification,
               child: const Text('Take a Screenshot'),
             ),
             new Container(child: screenShotWid,
-                          width: 300.0,
-                          height: 350.0,),
-            new Container(child: new Text(detectedText)),
-        ],
+                          width: 150.0,
+                          height: 200.0,),
+            new Expanded(
+              flex: 1,
+              child: new SingleChildScrollView(
+                      child: new Text(detectedText),
+              ),
+            ),
+            new RaisedButton(
+                    onPressed: copyToClipboard,
+                    child: const Text('Copy'),
+            ),
+          ],
         ),
       ),
     )
     );
   }
 
+  copyToClipboard(){
+    Clipboard.setData(new ClipboardData(text: detectedText));
+  }
+  
   detectText(String imagePath) async{
-    //getPermissionStatus();
     final FirebaseVisionImage visionImage = FirebaseVisionImage.fromFilePath(imagePath);
     final TextRecognizer textRecognizer = FirebaseVision.instance.textRecognizer();
     final VisionText visionText = await textRecognizer.processImage(visionImage);
     String text = visionText.text;
     setState(() {
-      screenShotPath = screenShotPath;
+      screenShotPath = imagePath;
       detectedText = text;
+      txt.text = text;
     });
-    print('text detect:'+ text);
-    //Clipboard.setData(new ClipboardData(text: 'Data'));
   }
 }
