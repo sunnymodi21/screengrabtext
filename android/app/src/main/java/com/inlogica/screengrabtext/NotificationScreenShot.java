@@ -8,7 +8,6 @@ import android.app.NotificationManager;
 import android.os.Build;
 import android.app.PendingIntent;
 
-
 public class NotificationScreenShot {
 
     NotificationManager notificationManager;

@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Date;
 
-import android.widget.Toast;
 import io.flutter.app.FlutterActivity;
 import io.flutter.plugin.common.MethodChannel;
 
