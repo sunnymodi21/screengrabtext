@@ -28,7 +28,7 @@ public class NotificationScreenShot {
         .setContentText("Click to copy")
         .setPriority(Notification.PRIORITY_HIGH)
         .setContentIntent(pendingIntent)
-        .setOnlyAlertOnce(true);
+        .setAutoCancel(true);
         //.addAction(R.drawable.ic_snooze, "Start Timer", startPendingIntent);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
