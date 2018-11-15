@@ -31,43 +31,53 @@ public class MainActivity extends FlutterActivity {
         
         // call for the projection manager
         screenshot = new ScreenShot(this, screenShotChannel);
+        screenshot.startProjection();
+
         screenShotChannel.setMethodCallHandler(
             new MethodCallHandler() {
                 @Override
                 public void onMethodCall(MethodCall call, Result result) {
                     if (call.method.equals("startProjection")) {
-                        notifyScreenshot.showNotifiction(7);
+
+                        final Toast toast = Toast.makeText(getApplicationContext(),"screenshot in "+Integer.toString(5),Toast.LENGTH_SHORT);
+                        toast.show();
+                        Handler toastHandler = new Handler();
+                        toastHandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                toast.cancel(); 
+                            }
+                        }, 1000);
+
                         final Handler countDownHandler = new Handler();
                         countDownHandler.postDelayed(new Runnable() {
-                            int count = 7;
+                            int count = 4;
                             public void run() {
-                                --count;
                                 if(count==0){
-                                    notifyScreenshot.cancelNotification();
-                                    screenshot.startProjection();
+                                    screenshot.takeScreenShot(notifyScreenshot);
                                 } else {
                                     final Toast toast = Toast.makeText(getApplicationContext(),"screenshot in "+Integer.toString(count),Toast.LENGTH_SHORT);
                                     toast.show();
                                     if(count==1){
-                                        Handler handler = new Handler();
-                                            handler.postDelayed(new Runnable() {
+                                        Handler toastHandler = new Handler();
+                                        toastHandler.postDelayed(new Runnable() {
                                             @Override
                                             public void run() {
                                                 toast.cancel(); 
                                             }
                                         }, 500);
                                     } else {
-                                        Handler handler = new Handler();
-                                            handler.postDelayed(new Runnable() {
+                                        Handler toastHandler = new Handler();
+                                        toastHandler.postDelayed(new Runnable() {
                                             @Override
                                             public void run() {
                                                 toast.cancel(); 
                                             }
                                         }, 1000);
                                     }
-                                    notifyScreenshot.showNotifiction(count);
                                     countDownHandler.postDelayed(this, 1000);
                                 }
+                                --count;
                             }
                         },1000);
                     }

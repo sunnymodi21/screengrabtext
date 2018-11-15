@@ -50,7 +50,10 @@ public class ScreenShot {
     private OrientationChangeCallback mOrientationChangeCallback;
     private Context sContext;
     private MethodChannel screenShotChannel;
-
+    private int requestResult;
+    private Intent mediaResultIntent;
+    private NotificationScreenShot notifyComplete;
+    
     ScreenShot(Context context, MethodChannel screenShotFlutChannel){
         sContext = context;
         screenShotChannel = screenShotFlutChannel;
@@ -94,6 +97,7 @@ public class ScreenShot {
                     fos = new FileOutputStream(latestImagePath);
                     bitmap.compress(CompressFormat.JPEG, 50, fos);
                     screenShotChannel.invokeMethod("onScreenShot", latestImagePath); 
+                    notifyComplete.showNotifiction();
                     stopProjection();
                     reader.close();
                     Log.i(TAG, "captured image: " + latestImagePath);
@@ -164,42 +168,47 @@ public class ScreenShot {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE) {
-            sMediaProjection = mProjectionManager.getMediaProjection(resultCode, data);
+            requestResult = resultCode;
+            mediaResultIntent = data;
+        }
+    }
 
-            if (sMediaProjection != null) {
-                File externalFilesDir = sContext.getExternalFilesDir(null);
-                if (externalFilesDir != null) {
-                    STORE_DIRECTORY = externalFilesDir.getAbsolutePath() + "/screenshots/";
-                    File storeDirectory = new File(STORE_DIRECTORY);
-                    if (!storeDirectory.exists()) {
-                        boolean success = storeDirectory.mkdirs();
-                        if (!success) {
-                            Log.e(TAG, "failed to create file storage directory.");
-                            return;
-                        }
+    public void takeScreenShot( NotificationScreenShot notificationScreenShot){
+        notifyComplete = notificationScreenShot;
+        sMediaProjection = mProjectionManager.getMediaProjection(requestResult, mediaResultIntent);
+        if (sMediaProjection != null) {
+            File externalFilesDir = sContext.getExternalFilesDir(null);
+            if (externalFilesDir != null) {
+                STORE_DIRECTORY = externalFilesDir.getAbsolutePath() + "/screenshots/";
+                File storeDirectory = new File(STORE_DIRECTORY);
+                if (!storeDirectory.exists()) {
+                    boolean success = storeDirectory.mkdirs();
+                    if (!success) {
+                        Log.e(TAG, "failed to create file storage directory.");
+                        return;
                     }
-                } else {
-                    Log.e(TAG, "failed to create file storage directory, getExternalFilesDir is null.");
-                    return;
                 }
-
-                // display metrics
-                DisplayMetrics metrics = sContext.getResources().getDisplayMetrics();
-                mDensity = metrics.densityDpi;
-                mDisplay = ((FlutterActivity) sContext).getWindowManager().getDefaultDisplay();
-
-                // create virtual display depending on device width / height
-                createVirtualDisplay();
-
-                // register orientation change callback
-                mOrientationChangeCallback = new OrientationChangeCallback(sContext);
-                if (mOrientationChangeCallback.canDetectOrientation()) {
-                    mOrientationChangeCallback.enable();
-                }
-
-                // register media projection stop callback
-                sMediaProjection.registerCallback(new MediaProjectionStopCallback(), mHandler);
+            } else {
+                Log.e(TAG, "failed to create file storage directory, getExternalFilesDir is null.");
+                return;
             }
+
+            // display metrics
+            DisplayMetrics metrics = sContext.getResources().getDisplayMetrics();
+            mDensity = metrics.densityDpi;
+            mDisplay = ((FlutterActivity) sContext).getWindowManager().getDefaultDisplay();
+
+            // create virtual display depending on device width / height
+            createVirtualDisplay();
+
+            // register orientation change callback
+            mOrientationChangeCallback = new OrientationChangeCallback(sContext);
+            if (mOrientationChangeCallback.canDetectOrientation()) {
+                mOrientationChangeCallback.enable();
+            }
+
+            // register media projection stop callback
+            sMediaProjection.registerCallback(new MediaProjectionStopCallback(), mHandler);
         }
     }
 
