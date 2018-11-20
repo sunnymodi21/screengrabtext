@@ -39,9 +39,9 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        ndk {
-            abiFilters "armeabi", "x86", "armeabi-v7a"
-        }
+        // ndk {
+        //     abiFilters "armeabi", "x86", "armeabi-v7a"
+        // }
         applicationId "com.inlogica.screengrabtext"
         minSdkVersion 16
         targetSdkVersion 27

@@ -54,7 +54,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     height: (MediaQuery.of(context).size.height*0.55),
                   );
                   } else {
-      screenShotWid = new Text('No Image');
+      screenShotWid = new Container(
+                    child: new Text('No Image'),
+                    width: (MediaQuery.of(context).size.width*0.6),
+                    height: (MediaQuery.of(context).size.height*0.55),
+                  );
     }
     return RepaintBoundary(
           key: previewContainer,
@@ -76,8 +80,20 @@ class _MyHomePageState extends State<MyHomePage> {
                     screenShotWid,
                     new TextField(
                       keyboardType: TextInputType.multiline,
-                      maxLines: 5,
+                      maxLines: 7,
                       controller: _controller,
+                      decoration: new InputDecoration(
+                        fillColor: Color(0xFCFCF4E0),
+                        filled: true,
+                        contentPadding: EdgeInsets.all(10),
+                        border: new OutlineInputBorder(
+                          borderSide: new BorderSide(
+                            width: 8.0, 
+                            color: Colors.red
+                          )
+                        ),
+                        
+                      ),
                     ),
                     // new RaisedButton(
                     //         onPressed: copyToClipboard,
