@@ -11,9 +11,9 @@ class MyApp extends StatelessWidget {
     return new MaterialApp(
       title: 'ScreenGrab Text',
       theme: new ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.lightBlue,
       ),
-      home: new MyHomePage(title: 'Text Detection'),
+      home: new MyHomePage(),
     );
   }
 }
@@ -31,7 +31,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String screenShotPath = '';
   String detectedText = '';
   static const platform = const MethodChannel('com.inlogica.screengrabtext/takeshot');
-  TextEditingController txt = new TextEditingController();
+  TextEditingController _controller;
 
   _startScreenShot() {
     platform.invokeMethod('startProjection');
@@ -48,48 +48,52 @@ class _MyHomePageState extends State<MyHomePage> {
     var screenShotWid;
     if(screenShotPath != ''){
       File imgFile = new File(screenShotPath);
-      screenShotWid = new Image.file(imgFile);
-    } else {
+      screenShotWid = new Container(
+                    child: new Image.file(imgFile),
+                    width: (MediaQuery.of(context).size.width*0.6),
+                    height: (MediaQuery.of(context).size.height*0.55),
+                  );
+                  } else {
       screenShotWid = new Text('No Image');
     }
-
     return RepaintBoundary(
-        key: previewContainer,
-      child: new Scaffold(
-      appBar: new AppBar(
-
-        title: new Text(widget.title),
-      ),
-      body: new Container(
-        child: new Column(
-          children: <Widget>[
-            new RaisedButton(
-                onPressed: _startScreenShot,
-              child: const Text('Take a Screenshot'),
+          key: previewContainer,
+          child: new GestureDetector(
+              onTap: () {
+                  SystemChannels.textInput.invokeMethod('TextInput.hide');
+              },
+            child: new Scaffold(
+            appBar: new AppBar(
+              title: new Text('Screenshot'),
             ),
-            new Container(child: screenShotWid,
-                          width: 150.0,
-                          height: 200.0,),
-            new Expanded(
-              flex: 1,
-              child: new SingleChildScrollView(
-                      child: new Text(detectedText),
+            body: new Container(
+                child: new ListView (
+                  children: <Widget>[
+                    new RaisedButton(
+                      onPressed: _startScreenShot,
+                      child: const Text('Take a Screenshot'),
+                    ),
+                    screenShotWid,
+                    new TextField(
+                      keyboardType: TextInputType.multiline,
+                      maxLines: 5,
+                      controller: _controller,
+                    ),
+                    // new RaisedButton(
+                    //         onPressed: copyToClipboard,
+                    //         child: const Text('Copy'),
+                    // ),
+                  ],
+                ),
               ),
             ),
-            new RaisedButton(
-                    onPressed: copyToClipboard,
-                    child: const Text('Copy'),
-            ),
-          ],
-        ),
-      ),
-    )
-    );
+          )
+        );
   }
 
-  copyToClipboard(){
-    Clipboard.setData(new ClipboardData(text: detectedText));
-  }
+  // copyToClipboard(){
+  //   Clipboard.setData(new ClipboardData(text: detectedText));
+  // }
   
   detectText(String imagePath) async{
     final FirebaseVisionImage visionImage = FirebaseVisionImage.fromFilePath(imagePath);
@@ -99,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       screenShotPath = imagePath;
       detectedText = text;
-      txt.text = text;
+       _controller = new TextEditingController(text:text);
     });
   }
 }
