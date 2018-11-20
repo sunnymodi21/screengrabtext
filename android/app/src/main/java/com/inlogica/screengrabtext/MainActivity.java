@@ -9,8 +9,9 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 
 import android.content.Intent;
-import java.util.Timer;
-import java.util.TimerTask;
+
+import android.widget.Toast;
+import android.os.Handler;
 
 public class MainActivity extends FlutterActivity {
     private static final String CHANNEL = "com.inlogica.screengrabtext/takeshot";
@@ -30,27 +31,55 @@ public class MainActivity extends FlutterActivity {
         
         // call for the projection manager
         screenshot = new ScreenShot(this, screenShotChannel);
+        screenshot.startProjection();
+
         screenShotChannel.setMethodCallHandler(
             new MethodCallHandler() {
                 @Override
                 public void onMethodCall(MethodCall call, Result result) {
                     if (call.method.equals("startProjection")) {
-                        notifyScreenshot.showNotifiction(7);
-                        final Timer myTimer = new Timer();
-                        myTimer.scheduleAtFixedRate(new TimerTask() {
-                            int count = 7;
+
+                        final Toast toast = Toast.makeText(getApplicationContext(),"screenshot in "+Integer.toString(5),Toast.LENGTH_SHORT);
+                        toast.show();
+                        Handler toastHandler = new Handler();
+                        toastHandler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                --count;
-                                if(count==0){
-                                    myTimer.cancel();
-                                    notifyScreenshot.cancelNotification();
-                                    screenshot.startProjection();
-                                } else {
-                                    notifyScreenshot.showNotifiction(count);
-                                }
+                                toast.cancel(); 
                             }
-                        },0,1000);
+                        }, 1000);
+
+                        final Handler countDownHandler = new Handler();
+                        countDownHandler.postDelayed(new Runnable() {
+                            int count = 4;
+                            public void run() {
+                                if(count==0){
+                                    screenshot.takeScreenShot(notifyScreenshot);
+                                } else {
+                                    final Toast toast = Toast.makeText(getApplicationContext(),"screenshot in "+Integer.toString(count),Toast.LENGTH_SHORT);
+                                    toast.show();
+                                    if(count==1){
+                                        Handler toastHandler = new Handler();
+                                        toastHandler.postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                toast.cancel(); 
+                                            }
+                                        }, 500);
+                                    } else {
+                                        Handler toastHandler = new Handler();
+                                        toastHandler.postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                toast.cancel(); 
+                                            }
+                                        }, 1000);
+                                    }
+                                    countDownHandler.postDelayed(this, 1000);
+                                }
+                                --count;
+                            }
+                        },1000);
                     }
                 }
             }

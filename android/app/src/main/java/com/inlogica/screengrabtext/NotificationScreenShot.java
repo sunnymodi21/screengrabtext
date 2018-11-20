@@ -8,7 +8,6 @@ import android.app.NotificationManager;
 import android.os.Build;
 import android.app.PendingIntent;
 
-
 public class NotificationScreenShot {
 
     NotificationManager notificationManager;
@@ -20,12 +19,16 @@ public class NotificationScreenShot {
         //Intent startIntent = new Intent(context, ActionReceiver.class);
         //PendingIntent startPendingIntent =
         //PendingIntent.getBroadcast(context, 0, startIntent, 0);
+        Intent intent = new Intent(context, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+
         mBuilder = new Notification.Builder(context, "com.inlogica.screengrabtext/notify")
         .setSmallIcon(R.mipmap.ic_launcher)
-        .setContentTitle("ScreenShot Countdown")
-        .setContentText("Taking screenshot in 7")
-        .setPriority(Notification.PRIORITY_DEFAULT)
-        .setOnlyAlertOnce(true);
+        .setContentTitle("ScreenShot Done")
+        .setContentText("Click to copy")
+        .setPriority(Notification.PRIORITY_HIGH)
+        .setContentIntent(pendingIntent)
+        .setAutoCancel(true);
         //.addAction(R.drawable.ic_snooze, "Start Timer", startPendingIntent);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -37,9 +40,8 @@ public class NotificationScreenShot {
         }
     }
 
-    public void showNotifiction(int count) {
+    public void showNotifiction() {
         assert notificationManager != null;
-        mBuilder.setContentText("Taking screenshot in "+Integer.toString(count));
         notificationManager.notify(101, mBuilder.build());
     }
 

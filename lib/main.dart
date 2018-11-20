@@ -33,7 +33,7 @@ class _MyHomePageState extends State<MyHomePage> {
   static const platform = const MethodChannel('com.inlogica.screengrabtext/takeshot');
   TextEditingController txt = new TextEditingController();
 
-  _showNotification() {
+  _startScreenShot() {
     platform.invokeMethod('startProjection');
     platform.setMethodCallHandler((MethodCall call) async {
       if(call.method=='onScreenShot') {
@@ -64,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: new Column(
           children: <Widget>[
             new RaisedButton(
-                onPressed: _showNotification,
+                onPressed: _startScreenShot,
               child: const Text('Take a Screenshot'),
             ),
             new Container(child: screenShotWid,
