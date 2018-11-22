@@ -29,7 +29,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   static GlobalKey previewContainer = new GlobalKey();
   String screenShotPath = '';
-  String detectedText = '';
   static const platform = const MethodChannel('com.inlogica.screengrabtext/takeshot');
   TextEditingController _controller;
 
@@ -45,22 +44,26 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    var screenShotWid;
+    Container screenShotWid;
     if(screenShotPath != ''){
       File imgFile = new File(screenShotPath);
       screenShotWid = new Container(
                     child: new Image.file(imgFile),
-                    width: (MediaQuery.of(context).size.width*0.6),
-                    height: (MediaQuery.of(context).size.height*0.55),
+                    width: (MediaQuery.of(context).size.width*0.7),
+                    height: (MediaQuery.of(context).size.height*0.6),
                   );
                   } else {
-      screenShotWid = new Text('No Image');
+      screenShotWid = new Container(
+                    child: new Text('No Image'),
+                    width: (MediaQuery.of(context).size.width*0.7),
+                    height: (MediaQuery.of(context).size.height*0.6),
+                  );
     }
     return RepaintBoundary(
           key: previewContainer,
           child: new GestureDetector(
               onTap: () {
-                  SystemChannels.textInput.invokeMethod('TextInput.hide');
+                  FocusScope.of(context).requestFocus(new FocusNode());
               },
             child: new Scaffold(
             appBar: new AppBar(
@@ -76,8 +79,21 @@ class _MyHomePageState extends State<MyHomePage> {
                     screenShotWid,
                     new TextField(
                       keyboardType: TextInputType.multiline,
-                      maxLines: 5,
+                      maxLines: null,
                       controller: _controller,
+                      scrollPadding: EdgeInsets.all(120),
+                      decoration: new InputDecoration(
+                        fillColor: Color(0xFCFCF4E0),
+                        filled: true,
+                        contentPadding: EdgeInsets.all(10),
+                        border: new OutlineInputBorder(
+                          borderSide: new BorderSide(
+                            width: 8.0, 
+                            color: Colors.red
+                          )
+                        ),
+                        
+                      ),
                     ),
                     // new RaisedButton(
                     //         onPressed: copyToClipboard,
@@ -91,18 +107,31 @@ class _MyHomePageState extends State<MyHomePage> {
         );
   }
 
-  // copyToClipboard(){
-  //   Clipboard.setData(new ClipboardData(text: detectedText));
-  // }
+  copyToClipboard(detectedText){
+    Clipboard.setData(new ClipboardData(text: detectedText));
+  }
   
   detectText(String imagePath) async{
     final FirebaseVisionImage visionImage = FirebaseVisionImage.fromFilePath(imagePath);
     final TextRecognizer textRecognizer = FirebaseVision.instance.textRecognizer();
     final VisionText visionText = await textRecognizer.processImage(visionImage);
-    String text = visionText.text;
+    var orderedText={}; 
+    for (TextBlock block in visionText.blocks) {
+      final boundingBox = block.boundingBox;
+      final String blockText = block.text;
+      if(blockText.length>2){
+        orderedText[boundingBox.top]= blockText;
+      }
+    }
+    String text = '';
+    var sortedKeys = orderedText.keys.toList();
+    sortedKeys.sort();
+    sortedKeys.forEach((key){
+      text = text+'\n'+orderedText[key];
+    });
+    copyToClipboard(text);
     setState(() {
       screenShotPath = imagePath;
-      detectedText = text;
        _controller = new TextEditingController(text:text);
     });
   }
