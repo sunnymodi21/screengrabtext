@@ -1,8 +1,13 @@
 # screengrabtext
+This app lets you copy any text on any screen in one click.
 
-A new Flutter project.
+Android Only
 
-## Getting Started
+Features:
+1. Copy text from any screen
+2. Copy text from any image
+3. It can also detect text in a video
 
-For help getting started with Flutter, view our online
-[documentation](https://flutter.io/).
+To-Do:
+1. Iphone support
+2. Searchable history
