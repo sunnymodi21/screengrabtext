@@ -84,13 +84,14 @@ public class ScreenShot {
                     int pixelStride = planes[0].getPixelStride();
                     int rowStride = planes[0].getRowStride();
                     int rowPadding = rowStride - pixelStride * mWidth;
+                    
                     // create bitmap
                     bitmap = Bitmap.createBitmap(mWidth + rowPadding / pixelStride, mHeight, Bitmap.Config.ARGB_8888);
                     bitmap.copyPixelsFromBuffer(buffer);
-
                     Date date = new Date();
                     long dateNowLong = date.getTime();
                     String dateNow = Long.toString(dateNowLong);
+                    bitmap = Bitmap.createBitmap(bitmap, 0, 70, mWidth, mHeight-70);
                     // write bitmap to a file
                     
                     String latestImagePath = STORE_DIRECTORY + "screenshot-" + dateNow + ".png";
@@ -235,7 +236,7 @@ public class ScreenShot {
         mHeight = size.y;
 
         // start capture reader
-        mImageReader = ImageReader.newInstance(mWidth, mHeight, PixelFormat.RGBA_8888, 2);
+        mImageReader = ImageReader.newInstance(mWidth, mHeight, PixelFormat.RGBA_8888, 1);
         mVirtualDisplay = sMediaProjection.createVirtualDisplay(SCREENCAP_NAME, mWidth, mHeight, mDensity, VIRTUAL_DISPLAY_FLAGS, mImageReader.getSurface(), null, mHandler);
         mImageReader.setOnImageAvailableListener(new ImageAvailableListener(), mHandler);
     }
