@@ -94,7 +94,8 @@ class _HomeScreenState extends State<HomeScreen> {
       final boundingBox = block.boundingBox;
       final String blockText = block.text;
       if(blockText.length>2){
-        orderedText[boundingBox.top]= blockText;
+        int position = int.parse(boundingBox.top.toString()+boundingBox.left.toString());
+        orderedText[position]= blockText;
       }
     }
     String text = '';

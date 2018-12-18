@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:screengrabtext/screen_text_provider.dart';
-import 'dart:io';
+import 'package:screengrabtext/card_widget.dart';
 
 class HistoryScreen extends StatelessWidget {
   final ScreenTextProvider screenTextDb = new ScreenTextProvider();
@@ -19,12 +19,8 @@ class HistoryScreen extends StatelessWidget {
                 //new Column(children: drawerOptions)
                 var items = <Widget>[];
                 snapshot.data.forEach((item){
-                  File imgFile = new File(item.imagepath);
                   items.add(
-                    new ListTile(
-                      leading: new Icon(Icons.home),
-                      title: new Text(item.text.substring(0, 10)+'.....')
-                    )
+                    new ScreenTextRow(id: item.id, imagePath: item.imagepath, text: item.text)
                   );
                 });
                 return new ListView(children: items);
