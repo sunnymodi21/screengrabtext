@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 
+import 'package:screengrabtext/detection_screen.dart';
+
 class ScreenTextRow extends StatelessWidget {
   final String text;
   final String imagePath;
@@ -36,7 +38,7 @@ class ScreenTextRow extends StatelessWidget {
       ),
       child: new Container(
         margin: new EdgeInsets.fromLTRB(40, 16, 20, 20),
-        child:new Text(text.substring(0, 50) +'.....',
+        child:new Text(text.substring(0, 10) +'.....',
           style: new TextStyle(
                   color: const Color(0xffb6b2df),
                   fontSize: 12.0,
@@ -48,7 +50,10 @@ class ScreenTextRow extends StatelessWidget {
     return new InkWell(
       // When the user taps the button, show a snackbar
       onTap: () {
-        Navigator.of(context).pop();
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => DetectionScreen(imagePath: imagePath, fromHistory: true, text: text)),
+        );
       },
       child:new Container(
         height: 120.0,

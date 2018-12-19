@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:screengrabtext/screen_text_provider.dart';
 import 'package:screengrabtext/screen_text_row_widget.dart';
+import 'package:screengrabtext/detection_button.dart';
 
 class HistoryScreen extends StatelessWidget {
   final ScreenTextProvider screenTextDb = new ScreenTextProvider();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("History"),
-      ),
-      body: Center(
-        child: FutureBuilder<List<ScreenText>>(
+    return new Stack(
+        children: <Widget>[
+          FutureBuilder<List<ScreenText>>(
             future: screenTextDb.getAllScreenText(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
@@ -30,7 +28,8 @@ class HistoryScreen extends StatelessWidget {
               return CircularProgressIndicator();
             },
           ),
-      ),
-    );
+          new DetectionButton(),
+        ]
+      );
   }
 }

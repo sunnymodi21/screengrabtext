@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:screengrabtext/home_screen.dart';
 import 'package:screengrabtext/history_screen.dart';
 
 class DrawerItem {
@@ -11,7 +10,6 @@ class DrawerItem {
 
 class HomeDrawer extends StatefulWidget {
   final drawerItems = [
-    new DrawerItem("Home", Icons.home),
     new DrawerItem("History", Icons.history)
   ];
 
@@ -28,12 +26,6 @@ class _HomeDrawerState extends State<HomeDrawer> {
       case 0:
         Navigator.of(context).pop();
         break;
-      case 1:
-        Navigator.of(context).pop();
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => HistoryScreen()),
-      );
     } // close the drawer
   }
 
@@ -55,13 +47,6 @@ class _HomeDrawerState extends State<HomeDrawer> {
     return new Scaffold(
       appBar: new AppBar(
         title: new Text(widget.drawerItems[0].title),
-        // actions: <Widget>[
-        //   IconButton(
-        //     icon: Icon(Icons.camera_alt),
-        //     tooltip: 'Detect text',
-        //     onPressed: _detectText,
-        //   ),
-        // ]
       ),
       drawer: new Drawer(
         child: new Column(
@@ -73,7 +58,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
           ],
         ),
       ),
-      body: new HomeScreen(),
+      body: new HistoryScreen(),
     );
   }
 }

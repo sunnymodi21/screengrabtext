@@ -1,36 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'dart:io';
 
 import 'package:screengrabtext/screen_text_provider.dart';
 import 'package:screengrabtext/text_edit_widget.dart';
 
-class HomeScreen extends StatefulWidget {
+class DetectionScreen extends StatefulWidget {
+  final String imagePath;
+  final bool fromHistory;
+  final String text;
+
+  DetectionScreen({@required this.fromHistory ,this.imagePath, this.text});
+  
   @override
-  _HomeScreenState createState() => new _HomeScreenState();
+  _DetectionScreenState createState() => new _DetectionScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  String screenShotPath = '';
+class _DetectionScreenState extends State<DetectionScreen> {
   String text= '';
-  static const platform = const MethodChannel('com.inlogica.screengrabtext/takeshot');
-
-  _startScreenShot() {
-    platform.invokeMethod('startProjection');
-    platform.setMethodCallHandler((MethodCall call) async {
-      if(call.method=='onScreenShot') {
-        print('location, ${call.arguments}');
-        detectText(call.arguments);
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
+    // if(widget.fromHistory){
+    //   setState(() {
+    //           text = widget.text;
+    //         });
+    // } else detectText(widget.imagePath);
     Container screenShotWid;
-    if(screenShotPath != ''){
-      File imgFile = new File(screenShotPath);
+    if(widget.imagePath != ''){
+      File imgFile = new File(widget.imagePath);
       screenShotWid = new Container(
                     child: new Image.file(imgFile),
                     width: (MediaQuery.of(context).size.width),
@@ -41,33 +39,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: new Text('No Image')
                   );
     }
-
-    Container startDetection = new Container(
-      width: 60.0,
-      height: 60.0,
-      margin: new EdgeInsets.only(left:MediaQuery.of(context).size.width-80,top:MediaQuery.of(context).size.height-160),
-      decoration: new BoxDecoration(
-        color: Colors.blueGrey,
-        shape: BoxShape.circle,
-        boxShadow: <BoxShadow>[
-          new BoxShadow(  
-            color: Colors.black12,
-            blurRadius: 10.0,
-            offset: new Offset(0.0, 10.0),
-          ),
-        ],
-      ),
-      child: new IconButton(
-              icon: Icon(Icons.camera_alt),
-              tooltip: 'Detect text',
-              onPressed: _startScreenShot,
-              color: Colors.white,
-              iconSize: 30,
-            )
-      );
       
-    return new Container(
-      child: new GestureDetector(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Detection"),
+      ),
+      body: new GestureDetector(
         onTap: () {
             FocusScope.of(context).requestFocus(new FocusNode());
         },
@@ -81,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: <Widget>[
                 screenShotWid,
                 //new TextEdit(text),
-                startDetection
+                //new DetectionButton(),
               ],
             ),
           ],
@@ -115,7 +92,6 @@ class _HomeScreenState extends State<HomeScreen> {
     ScreenTextProvider screenTextDb = new ScreenTextProvider();
     screenTextDb.insert(screenText);
     setState(() {
-      screenShotPath = imagePath;
       text = text;
     });
   }
