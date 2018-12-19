@@ -73,7 +73,6 @@ class ScreenTextProvider {
     List<Map> allScreenText = await db.query(tableScreenText,
         columns: [columnId, columnImagePath, columnText]);
     db.close();
-    print(allScreenText);
     List<ScreenText> screenTextList= [];
     allScreenText.forEach((element){
       screenTextList.add(ScreenText.fromMap(element));

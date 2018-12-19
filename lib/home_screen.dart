@@ -4,6 +4,7 @@ import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'dart:io';
 
 import 'package:screengrabtext/screen_text_provider.dart';
+import 'package:screengrabtext/text_edit_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -12,8 +13,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String screenShotPath = '';
+  String text= '';
   static const platform = const MethodChannel('com.inlogica.screengrabtext/takeshot');
-  TextEditingController _controller;
 
   _startScreenShot() {
     platform.invokeMethod('startProjection');
@@ -32,16 +33,39 @@ class _HomeScreenState extends State<HomeScreen> {
       File imgFile = new File(screenShotPath);
       screenShotWid = new Container(
                     child: new Image.file(imgFile),
-                    width: (MediaQuery.of(context).size.width*0.7),
-                    height: (MediaQuery.of(context).size.height*0.6),
+                    width: (MediaQuery.of(context).size.width),
+                    height: (MediaQuery.of(context).size.height-80),
                   );
                   } else {
       screenShotWid = new Container(
-                    child: new Text('No Image'),
-                    width: (MediaQuery.of(context).size.width*0.7),
-                    height: (MediaQuery.of(context).size.height*0.6),
+                    child: new Text('No Image')
                   );
     }
+
+    Container startDetection = new Container(
+      width: 60.0,
+      height: 60.0,
+      margin: new EdgeInsets.only(left:MediaQuery.of(context).size.width-80,top:MediaQuery.of(context).size.height-160),
+      decoration: new BoxDecoration(
+        color: Colors.blueGrey,
+        shape: BoxShape.circle,
+        boxShadow: <BoxShadow>[
+          new BoxShadow(  
+            color: Colors.black12,
+            blurRadius: 10.0,
+            offset: new Offset(0.0, 10.0),
+          ),
+        ],
+      ),
+      child: new IconButton(
+              icon: Icon(Icons.camera_alt),
+              tooltip: 'Detect text',
+              onPressed: _startScreenShot,
+              color: Colors.white,
+              iconSize: 30,
+            )
+      );
+      
     return new Container(
       child: new GestureDetector(
         onTap: () {
@@ -49,40 +73,21 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         child: new ListView (
           children: <Widget>[
-            new RaisedButton(
-              onPressed: _startScreenShot,
-              child: const Text('Take a Screenshot'),
-            ),
-            screenShotWid,
-            new TextField(
-              keyboardType: TextInputType.multiline,
-              maxLines: null,
-              controller: _controller,
-              scrollPadding: EdgeInsets.all(120),
-              decoration: new InputDecoration(
-                fillColor: Color(0xFCFCF4E0),
-                filled: true,
-                contentPadding: EdgeInsets.all(10),
-                border: new OutlineInputBorder(
-                  borderSide: new BorderSide(
-                    width: 8.0, 
-                    color: Colors.red
-                  )
-                ),
-              ),
-            ),
             // new RaisedButton(
-            //         onPressed: copyToClipboard,
-            //         child: const Text('Copy'),
+            //   onPressed: _startScreenShot,
+            //   child: const Text('Take a Screenshot'),
             // ),
+            new Stack(
+              children: <Widget>[
+                screenShotWid,
+                //new TextEdit(text),
+                startDetection
+              ],
+            ),
           ],
         ),
       ),
     );
-  }
-
-  copyToClipboard(){
-    Clipboard.setData(new ClipboardData(text: _controller.text));
   }
   
   detectText(String imagePath) async{
@@ -111,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
     screenTextDb.insert(screenText);
     setState(() {
       screenShotPath = imagePath;
-       _controller = new TextEditingController(text:text);
+      text = text;
     });
   }
 }

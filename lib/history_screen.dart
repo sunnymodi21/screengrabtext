@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:screengrabtext/screen_text_provider.dart';
-import 'package:screengrabtext/card_widget.dart';
+import 'package:screengrabtext/screen_text_row_widget.dart';
 
 class HistoryScreen extends StatelessWidget {
   final ScreenTextProvider screenTextDb = new ScreenTextProvider();
@@ -16,7 +16,6 @@ class HistoryScreen extends StatelessWidget {
             future: screenTextDb.getAllScreenText(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                //new Column(children: drawerOptions)
                 var items = <Widget>[];
                 snapshot.data.forEach((item){
                   items.add(

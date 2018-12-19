@@ -55,6 +55,13 @@ class _HomeDrawerState extends State<HomeDrawer> {
     return new Scaffold(
       appBar: new AppBar(
         title: new Text(widget.drawerItems[0].title),
+        // actions: <Widget>[
+        //   IconButton(
+        //     icon: Icon(Icons.camera_alt),
+        //     tooltip: 'Detect text',
+        //     onPressed: _detectText,
+        //   ),
+        // ]
       ),
       drawer: new Drawer(
         child: new Column(

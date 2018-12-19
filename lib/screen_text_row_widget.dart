@@ -36,7 +36,7 @@ class ScreenTextRow extends StatelessWidget {
       ),
       child: new Container(
         margin: new EdgeInsets.fromLTRB(40, 16, 20, 20),
-        child:new Text(text.substring(0, 50)+'.....',
+        child:new Text(text.substring(0, 50) +'.....',
           style: new TextStyle(
                   color: const Color(0xffb6b2df),
                   fontSize: 12.0,
@@ -45,17 +45,23 @@ class ScreenTextRow extends StatelessWidget {
       ),
     );
 
-    return new Container(
-      height: 120.0,
-      margin: const EdgeInsets.symmetric(
-        vertical: 16.0,
-        horizontal: 10.0,
-      ),
-      child: new Stack(
-        children: <Widget>[
-          textCard,
-          textThumbnail,
-        ],
+    return new InkWell(
+      // When the user taps the button, show a snackbar
+      onTap: () {
+        Navigator.of(context).pop();
+      },
+      child:new Container(
+        height: 120.0,
+        margin: const EdgeInsets.symmetric(
+          vertical: 16.0,
+          horizontal: 10.0,
+        ),
+        child: new Stack(
+          children: <Widget>[
+            textCard,
+            textThumbnail,
+          ],
+        ),
       ),
     );
   }
