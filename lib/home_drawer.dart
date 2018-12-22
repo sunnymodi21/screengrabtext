@@ -9,9 +9,7 @@ class DrawerItem {
 }
 
 class HomeDrawer extends StatefulWidget {
-  final drawerItems = [
-    new DrawerItem("History", Icons.history)
-  ];
+  final drawerItems = [new DrawerItem("History", Icons.history)];
 
   @override
   State<StatefulWidget> createState() {
@@ -20,7 +18,6 @@ class HomeDrawer extends StatefulWidget {
 }
 
 class _HomeDrawerState extends State<HomeDrawer> {
-  
   _onSelectItem(int index) {
     switch (index) {
       case 0:
@@ -34,14 +31,12 @@ class _HomeDrawerState extends State<HomeDrawer> {
     var drawerOptions = <Widget>[];
     for (var i = 0; i < widget.drawerItems.length; i++) {
       var d = widget.drawerItems[i];
-      drawerOptions.add(
-        new ListTile(
-          leading: new Icon(d.icon),
-          title: new Text(d.title),
-          selected: i == 0,
-          onTap: () => _onSelectItem(i),
-        )
-      );
+      drawerOptions.add(new ListTile(
+        leading: new Icon(d.icon),
+        title: new Text(d.title),
+        selected: i == 0,
+        onTap: () => _onSelectItem(i),
+      ));
     }
 
     return new Scaffold(
@@ -52,8 +47,9 @@ class _HomeDrawerState extends State<HomeDrawer> {
         child: new Column(
           children: <Widget>[
             new UserAccountsDrawerHeader(
-                accountName: new Text("User"), 
-                accountEmail: null,),
+              accountName: new Text("User"),
+              accountEmail: null,
+            ),
             new Column(children: drawerOptions)
           ],
         ),
