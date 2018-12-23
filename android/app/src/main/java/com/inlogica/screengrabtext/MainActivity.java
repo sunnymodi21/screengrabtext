@@ -17,7 +17,6 @@ public class MainActivity extends FlutterActivity {
     private static final String CHANNEL = "com.inlogica.screengrabtext/takeshot";
 
     private ScreenShot screenshot;
-    private MethodChannel screenShotChannel;
     private NotificationScreenShot notifyScreenshot;
 
   @Override
@@ -27,7 +26,7 @@ public class MainActivity extends FlutterActivity {
         
         notifyScreenshot = new NotificationScreenShot(this);
 
-        screenShotChannel = new MethodChannel(getFlutterView(), CHANNEL);
+      MethodChannel screenShotChannel = new MethodChannel(getFlutterView(), CHANNEL);
         
         // call for the projection manager
         screenshot = new ScreenShot(this, screenShotChannel);
@@ -84,20 +83,6 @@ public class MainActivity extends FlutterActivity {
                 }
             }
         );
-            // ,new MethodChannel(){
-            //     @Override 
-            //     public void success(response) {
-            //         Log.i("MSG", result);
-            //       }
-            //     @Override 
-            //     public void error(String code, String msg, details) {
-            //         Log.e("MSG", name failed +" "+ msg);
-            //       }
-            //     @Override 
-            //     public voidnotImplemented() {
-            //         Log.e("MSG", name+" not implemented");
-            //       }
-            // });
     }
 
     @Override
