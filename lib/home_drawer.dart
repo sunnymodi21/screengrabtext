@@ -43,17 +43,17 @@ class _HomeDrawerState extends State<HomeDrawer> {
       appBar: new AppBar(
         title: new Text(widget.drawerItems[0].title),
       ),
-      drawer: new Drawer(
-        child: new Column(
-          children: <Widget>[
-            new UserAccountsDrawerHeader(
-              accountName: new Text("User"),
-              accountEmail: null,
-            ),
-            new Column(children: drawerOptions)
-          ],
-        ),
-      ),
+      // drawer: new Drawer(
+      //   child: new Column(
+      //     children: <Widget>[
+      //       new UserAccountsDrawerHeader(
+      //         accountName: new Text("User"),
+      //         accountEmail: null,
+      //       ),
+      //       new Column(children: drawerOptions)
+      //     ],
+      //   ),
+      // ),
       body: new HistoryScreen(),
     );
   }

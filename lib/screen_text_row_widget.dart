@@ -15,14 +15,15 @@ class ScreenTextRow extends StatelessWidget {
     final textThumbnail = new Container(
         margin: new EdgeInsets.symmetric(vertical: 16.0),
         alignment: FractionalOffset.centerLeft,
-        child: new Image.file(File(screenText.imagepath), height: 92.0, width: 92.0));
+        child: new Image.file(File(screenText.imagepath),
+            height: 92.0, width: 92.0));
 
     final textCard = new Container(
       height: 124.0,
       width: 290,
       margin: new EdgeInsets.only(left: 46.0),
       decoration: new BoxDecoration(
-        color: new Color(0xFF333366),
+        color: Colors.black54,
         shape: BoxShape.rectangle,
         borderRadius: new BorderRadius.circular(8.0),
         boxShadow: <BoxShadow>[
@@ -36,9 +37,11 @@ class ScreenTextRow extends StatelessWidget {
       child: new Container(
         margin: new EdgeInsets.fromLTRB(40, 16, 20, 20),
         child: new Text(
-          screenText.text.substring(0, 10) + '.....',
+          screenText.text.length > 100
+              ? screenText.text.substring(0, 100) + '.....'
+              : screenText.text,
           style: new TextStyle(
-              color: const Color(0xffb6b2df),
+              color: Colors.white,
               fontSize: 12.0,
               fontWeight: FontWeight.w400),
         ),
@@ -47,12 +50,13 @@ class ScreenTextRow extends StatelessWidget {
 
     return new InkWell(
       onTap: () {
-
         Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => DetectionScreen(
-                  screenText: screenText, fromHistory: true,)),
+                    screenText: screenText,
+                    fromHistory: true,
+                  )),
         );
       },
       child: new Container(

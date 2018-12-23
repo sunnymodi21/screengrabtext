@@ -29,7 +29,7 @@ class DetectionButton extends StatelessWidget {
         width: 60.0,
         height: 60.0,
         decoration: new BoxDecoration(
-          color: Colors.blueGrey,
+          color: Colors.blue,
           shape: BoxShape.circle,
           boxShadow: <BoxShadow>[
             new BoxShadow(

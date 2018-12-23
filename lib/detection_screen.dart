@@ -18,7 +18,7 @@ class DetectionScreen extends StatefulWidget {
 
 class _DetectionScreenState extends State<DetectionScreen> {
   ScreenText screenTextState = new ScreenText();
-  double dragOffset = 450.0;
+  double dragOffset = 400.0;
 
   @override
   void initState() {
@@ -31,10 +31,9 @@ class _DetectionScreenState extends State<DetectionScreen> {
       detectText(widget.screenText.imagepath);
   }
 
-  onDragChange(details){
-    print(details.offset.dy);
+  _onDragChange(details){
     setState(() {
-      dragOffset = details.offset.dy;
+      dragOffset = details.offset.dy*0.75;
     });
   }
 
@@ -78,7 +77,7 @@ class _DetectionScreenState extends State<DetectionScreen> {
                     child: textWindow(),
                     feedback: textWindow(),
                     childWhenDragging: Container(),
-                    onDragEnd: onDragChange,
+                    onDragEnd: _onDragChange,
                   ),
                 ),
             ),

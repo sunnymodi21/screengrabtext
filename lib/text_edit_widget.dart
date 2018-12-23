@@ -32,11 +32,13 @@ class _TextEditState extends State<TextEdit> {
             IconButton(
               icon: Icon(Icons.save),
               onPressed: ()=>_onSave(_controller.text),
+              tooltip: 'Save',
             ),
           ]
       ),
       body: new Container(
         child: new TextField(
+          autofocus: true,
           keyboardType: TextInputType.multiline,
           maxLines: null,
           controller: _controller,

@@ -2,31 +2,27 @@ package com.inlogica.screengrabtext;
 
 import android.content.Context;
 import android.content.Intent;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.os.Build;
 import android.app.PendingIntent;
+import android.support.v4.app.NotificationCompat;
 
 public class NotificationScreenShot {
 
     NotificationManager notificationManager;
-    private Notification.Builder mBuilder;
+    private NotificationCompat.Builder mBuilder;
 
     NotificationScreenShot(Context context){
         notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        //Intent startIntent = new Intent(context, ActionReceiver.class);
-        //PendingIntent startPendingIntent =
-        //PendingIntent.getBroadcast(context, 0, startIntent, 0);
         Intent intent = new Intent(context, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
-        mBuilder = new Notification.Builder(context, "com.inlogica.screengrabtext/notify")
+        mBuilder = new NotificationCompat.Builder(context, "com.inlogica.screengrabtext/notify")
         .setSmallIcon(R.mipmap.ic_launcher)
         .setContentTitle("ScreenShot Done")
         .setContentText("Click to copy")
-        .setPriority(Notification.PRIORITY_HIGH)
         .setContentIntent(pendingIntent)
         .setAutoCancel(true);
         //.addAction(R.drawable.ic_snooze, "Start Timer", startPendingIntent);
@@ -40,7 +36,7 @@ public class NotificationScreenShot {
         }
     }
 
-    public void showNotifiction() {
+    public void showNotification() {
         assert notificationManager != null;
         notificationManager.notify(101, mBuilder.build());
     }

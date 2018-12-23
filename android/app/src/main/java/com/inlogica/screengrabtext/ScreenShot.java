@@ -29,11 +29,9 @@ import io.flutter.app.FlutterActivity;
 import io.flutter.plugin.common.MethodChannel;
 
 public class ScreenShot {
-    private static final String CHANNEL = "com.inlogica.screengrabtext/takeshot";
     private static final String TAG = "Projection";
     private static final int REQUEST_CODE = 100;
     private static String STORE_DIRECTORY;
-    private static int IMAGES_PRODUCED;
     private static final String SCREENCAP_NAME = "screencap";
     private static final int VIRTUAL_DISPLAY_FLAGS = DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY | DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC;
     private static MediaProjection sMediaProjection;
@@ -98,7 +96,7 @@ public class ScreenShot {
                     fos = new FileOutputStream(latestImagePath);
                     bitmap.compress(CompressFormat.JPEG, 50, fos);
                     screenShotChannel.invokeMethod("onScreenShot", latestImagePath); 
-                    notifyComplete.showNotifiction();
+                    notifyComplete.showNotification();
                     stopProjection();
                     reader.close();
                     Log.i(TAG, "captured image: " + latestImagePath);
