@@ -38,9 +38,9 @@ android {
     }
 
     defaultConfig {
-        ndk {
-            abiFilters "armeabi", "x86", "armeabi-v7a"
-        }
+        // ndk {
+        //     abiFilters "armeabi", "x86", "armeabi-v7a"
+        // }
         applicationId "com.inlogica.screengrabtext"
         minSdkVersion 21
         targetSdkVersion 27
