@@ -63,7 +63,7 @@ public class MainActivity extends FlutterActivity {
                             int count = 4;
                             public void run() {
                                 if(count==0){
-                                    //screenshot.takeScreenShot(notifyScreenshot);
+                                    screenshot.takeScreenShot(notifyScreenshot);
                                 } else {
                                     final Toast toast = Toast.makeText(getApplicationContext(),"screenshot in "+Integer.toString(count),Toast.LENGTH_SHORT);
                                     toast.show();
