@@ -1,5 +1,7 @@
 package com.inlogica.screengrabtext;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
 import io.flutter.plugins.GeneratedPluginRegistrant;
@@ -9,6 +11,8 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 
 import android.content.Intent;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 import android.os.Handler;
 
@@ -27,13 +31,18 @@ public class MainActivity extends FlutterActivity {
 
         notifyScreenshot = new NotificationScreenShot(this);
 
-        screenShotFileObserver = new ScreenShotObserver();
+      if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+              != PackageManager.PERMISSION_GRANTED) {
 
+          ActivityCompat.requestPermissions(MainActivity.this,
+                  new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                  1);
+      }
         MethodChannel screenShotChannel = new MethodChannel(getFlutterView(), CHANNEL);
+        screenShotFileObserver = new ScreenShotObserver();
         screenShotFileObserver.screenShotObserve(this, screenShotChannel);
         screenshot = new ScreenShot(this, screenShotChannel);
         screenshot.startProjection();
-        screenShotFileObserver = new ScreenShotObserver();
         screenShotChannel.setMethodCallHandler(
             new MethodCallHandler() {
                 @Override

@@ -1,10 +1,13 @@
 package com.inlogica.screengrabtext;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.database.ContentObserver;
 import android.os.HandlerThread;
@@ -52,26 +55,28 @@ public class ScreenShotObserver {
                     @Override
                     public void onChange(boolean selfChange, Uri uri) {
                         if (uri.toString().matches(MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString() + "/[0-9]+")) {
-    
-                            Cursor cursor = null;
-                            try {
-                                cursor = context.getContentResolver().query(uri, new String[] {
-                                        MediaStore.Images.Media.DISPLAY_NAME,
-                                        MediaStore.Images.Media.DATA
-                                }, null, null, null);
-                                if (cursor != null && cursor.moveToFirst()) {
-                                    final String fileName = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME));
-                                    final String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
-                                    if(path.matches(screenShotPath+"(.*)")){
-                                        Log.d(TAG, "just screenshot" + fileName + " " + path);
-                                        notifyScreenshot = new NotificationScreenShot(context);
-                                        notifyScreenshot.showNotification();
-                                        screenShotChannel.invokeMethod("onScreenShot", path);
+                            if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE)
+                                    == PackageManager.PERMISSION_GRANTED) {
+                                Cursor cursor = null;
+                                try {
+                                    cursor = context.getContentResolver().query(uri, new String[]{
+                                            MediaStore.Images.Media.DISPLAY_NAME,
+                                            MediaStore.Images.Media.DATA
+                                    }, null, null, null);
+                                    if (cursor != null && cursor.moveToFirst()) {
+                                        final String fileName = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME));
+                                        final String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+                                        if (path.matches(screenShotPath + "(.*)")) {
+                                            Log.d(TAG, "just screenshot" + fileName + " " + path);
+                                            notifyScreenshot = new NotificationScreenShot(context);
+                                            notifyScreenshot.showNotification();
+                                            screenShotChannel.invokeMethod("onScreenShot", path);
+                                        }
                                     }
-                                }
-                            } finally {
-                                if (cursor != null)  {
-                                    cursor.close();
+                                } finally {
+                                    if (cursor != null) {
+                                        cursor.close();
+                                    }
                                 }
                             }
                         }
