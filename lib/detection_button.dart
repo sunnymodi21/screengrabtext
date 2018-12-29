@@ -4,9 +4,10 @@ import 'package:screengrabtext/detection_screen.dart';
 import 'package:screengrabtext/screen_text_provider.dart';
 
 class DetectionButton extends StatelessWidget {
+  
+  final ScreenShot screenshot = new ScreenShot();
   _startScreenShot(BuildContext context) {
-    ScreenShot screenshot = new ScreenShot();
-    screenshot.startScreenShot(context, _onScreenShot);
+    screenshot.startScreenShot();
   }
 
   _onScreenShot(BuildContext context, String imagePath) {
@@ -25,6 +26,7 @@ class DetectionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    screenshot.screenShotHandler(context, _onScreenShot);
     return new Container(
         width: 60.0,
         height: 60.0,

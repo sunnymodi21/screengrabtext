@@ -4,9 +4,12 @@ class ScreenShot {
   static const platform =
       const MethodChannel('com.inlogica.screengrabtext/takeshot');
 
-  startScreenShot(context, _onScreenShot) {
+  startScreenShot() {
     platform.invokeMethod('startProjection');
-    platform.setMethodCallHandler((MethodCall call) async {
+  }
+
+  screenShotHandler(context, _onScreenShot){
+      platform.setMethodCallHandler((MethodCall call) async {
       if (call.method == 'onScreenShot') {
         print('location, ${call.arguments}');
         String imagePath = call.arguments;
