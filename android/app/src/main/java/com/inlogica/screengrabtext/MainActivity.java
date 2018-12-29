@@ -9,7 +9,6 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 
 import android.content.Intent;
-
 import android.widget.Toast;
 import android.os.Handler;
 
@@ -19,25 +18,27 @@ public class MainActivity extends FlutterActivity {
     private ScreenShot screenshot;
     private NotificationScreenShot notifyScreenshot;
 
+    ScreenShotObserver screenShotFileObserver;
+
   @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         GeneratedPluginRegistrant.registerWith(this);
-        
+
         notifyScreenshot = new NotificationScreenShot(this);
 
-      MethodChannel screenShotChannel = new MethodChannel(getFlutterView(), CHANNEL);
-        
-        // call for the projection manager
+        screenShotFileObserver = new ScreenShotObserver();
+
+        MethodChannel screenShotChannel = new MethodChannel(getFlutterView(), CHANNEL);
+        screenShotFileObserver.screenShotObserve(this, screenShotChannel);
         screenshot = new ScreenShot(this, screenShotChannel);
         screenshot.startProjection();
-
+        screenShotFileObserver = new ScreenShotObserver();
         screenShotChannel.setMethodCallHandler(
             new MethodCallHandler() {
                 @Override
                 public void onMethodCall(MethodCall call, Result result) {
                     if (call.method.equals("startProjection")) {
-
                         final Toast toast = Toast.makeText(getApplicationContext(),"screenshot in "+Integer.toString(5),Toast.LENGTH_SHORT);
                         toast.show();
                         Handler toastHandler = new Handler();
@@ -53,7 +54,7 @@ public class MainActivity extends FlutterActivity {
                             int count = 4;
                             public void run() {
                                 if(count==0){
-                                    screenshot.takeScreenShot(notifyScreenshot);
+                                    //screenshot.takeScreenShot(notifyScreenshot);
                                 } else {
                                     final Toast toast = Toast.makeText(getApplicationContext(),"screenshot in "+Integer.toString(count),Toast.LENGTH_SHORT);
                                     toast.show();
