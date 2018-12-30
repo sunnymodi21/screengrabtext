@@ -39,9 +39,6 @@ public class ScreenShotObserver {
                 true,
                 new ContentObserver(handler) {
 
-                    private File pix = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-                    private String screenShotPath = new File(pix, "Screenshots").getAbsolutePath();
-
                     @Override
                     public boolean deliverSelfNotifications() {
                         return super.deliverSelfNotifications();
@@ -54,7 +51,10 @@ public class ScreenShotObserver {
     
                     @Override
                     public void onChange(boolean selfChange, Uri uri) {
-                        if (uri.toString().matches(MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString() + "/[0-9]+")) {
+                        
+                        Log.d(TAG, "URI " + uri.toString());
+                        if (uri.toString().matches(MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString() + "/[0-9]+(.*)")) {
+                            Log.d(TAG, "In URI " + MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString());
                             if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE)
                                     == PackageManager.PERMISSION_GRANTED) {
                                 Cursor cursor = null;
@@ -66,7 +66,8 @@ public class ScreenShotObserver {
                                     if (cursor != null && cursor.moveToFirst()) {
                                         final String fileName = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME));
                                         final String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
-                                        if (path.matches(screenShotPath + "(.*)")) {
+                                        Log.d(TAG, "path" + path);
+                                        if (path.matches("(.*)Screenshots(.*)")) {
                                             Log.d(TAG, "just screenshot" + fileName + " " + path);
                                             notifyScreenshot = new NotificationScreenShot(context);
                                             notifyScreenshot.showNotification();
