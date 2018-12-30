@@ -2,6 +2,7 @@
 This app lets you copy any text on any screen in one click.
 
 Apps is built using [Flutter](https://flutter.io)
+
 Android Only
 
 Features:
