@@ -16,6 +16,8 @@ dependencies:
   firebase_ml_vision: ^0.2.0+1
   sqflite: any
   share: ^0.5.3
+  image_picker: ^0.4.10
+  flutter_local_notifications: ^0.4.2+1
   flutter:
     sdk: flutter
 
