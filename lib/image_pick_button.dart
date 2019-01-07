@@ -5,6 +5,10 @@ import 'package:screengrabtext/detection_screen.dart';
 import 'package:screengrabtext/screen_text_provider.dart';
 
 class ImagePickerButton extends StatefulWidget {
+  final String option;
+
+  ImagePickerButton(this.option);
+
   @override
   _ImagePickerButtonState createState() => new _ImagePickerButtonState();
 }
@@ -12,18 +16,21 @@ class ImagePickerButton extends StatefulWidget {
 class _ImagePickerButtonState extends State<ImagePickerButton> {
   
   Future getImage() async {
-    File image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    ScreenText screenText = new ScreenText();
-    screenText.imagepath = image.path;
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => DetectionScreen(
-          screenText: screenText,
-          fromHistory: false,
-        )
-      ),
-    );
+    ImageSource source = widget.option=='camera'? ImageSource.camera: ImageSource.gallery;
+    File image = await ImagePicker.pickImage(source: source);
+    if(image!=null){      
+      ScreenText screenText = new ScreenText();
+      screenText.imagepath = image.path;
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DetectionScreen(
+            screenText: screenText,
+            fromHistory: false,
+          )
+        ),
+      );
+    }
   }
 
   @override
@@ -33,13 +40,13 @@ class _ImagePickerButtonState extends State<ImagePickerButton> {
           height: 50.0,
           margin: new EdgeInsets.only(bottom: 15.0),
           child: new FloatingActionButton(
-            heroTag: "imagepickbutton",
+            heroTag: widget.option,
             backgroundColor: Colors.blue,
             onPressed: getImage,
-            tooltip: 'Pick Image',
+            tooltip: 'Get Image',
             shape: new CircleBorder(),
             child: Icon(
-              Icons.photo_library,
+              widget.option=='camera'? Icons.camera_alt:Icons.photo_library,
               color: Colors.white,
               size: 27,
             ),
