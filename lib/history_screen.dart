@@ -9,7 +9,7 @@ class HistoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Stack(
-      alignment: const Alignment(0.8, 0.9),
+      alignment: const Alignment(0.85, 0.9),
       children: <Widget>[
       FutureBuilder<List<ScreenText>>(
         future: screenTextDb.getAllScreenText(),

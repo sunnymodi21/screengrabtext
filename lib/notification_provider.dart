@@ -34,10 +34,10 @@ class NotificationProvider {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => DetectionScreen(
-                screenText: screenText,
-                fromHistory: false,
-              )),
+        builder: (context) => DetectionScreen(
+              screenText: screenText,
+              fromHistory: false,
+            )),
     );
   }
 

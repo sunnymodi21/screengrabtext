@@ -93,6 +93,7 @@ public class MainActivity extends FlutterActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         screenshot.onActivityResult(requestCode, resultCode, data);
     }
 }
