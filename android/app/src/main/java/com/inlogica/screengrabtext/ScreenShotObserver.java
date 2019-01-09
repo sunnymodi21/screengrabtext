@@ -3,7 +3,6 @@ package com.inlogica.screengrabtext;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
@@ -14,13 +13,11 @@ import android.os.HandlerThread;
 import android.net.Uri;
 import android.database.Cursor;
 
-import java.io.File;
 import io.flutter.plugin.common.MethodChannel;
 
 public class ScreenShotObserver {
 
     private String TAG = "ScreenShotObserver";
-    private NotificationScreenShot notifyScreenshot;
     public void screenShotObserve(Context mainContext, MethodChannel screenShotFlutChannel){
         final Context context = mainContext;
         final MethodChannel screenShotChannel = screenShotFlutChannel;
@@ -69,8 +66,6 @@ public class ScreenShotObserver {
                                         Log.d(TAG, "path" + path);
                                         if (path.matches("(.*)Screenshots(.*)")) {
                                             Log.d(TAG, "just screenshot" + fileName + " " + path);
-                                            notifyScreenshot = new NotificationScreenShot(context);
-                                            notifyScreenshot.showNotification();
                                             screenShotChannel.invokeMethod("onScreenShot", path);
                                         }
                                     }

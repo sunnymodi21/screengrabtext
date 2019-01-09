@@ -20,16 +20,12 @@ public class MainActivity extends FlutterActivity {
     private static final String CHANNEL = "com.inlogica.screengrabtext/takeshot";
 
     private ScreenShot screenshot;
-    private NotificationScreenShot notifyScreenshot;
-
     ScreenShotObserver screenShotFileObserver;
 
   @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         GeneratedPluginRegistrant.registerWith(this);
-
-        notifyScreenshot = new NotificationScreenShot(this);
 
       if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
               != PackageManager.PERMISSION_GRANTED) {
@@ -63,7 +59,7 @@ public class MainActivity extends FlutterActivity {
                             int count = 4;
                             public void run() {
                                 if(count==0){
-                                    screenshot.takeScreenShot(notifyScreenshot);
+                                    screenshot.takeScreenShot();
                                 } else {
                                     final Toast toast = Toast.makeText(getApplicationContext(),"screenshot in "+Integer.toString(count),Toast.LENGTH_SHORT);
                                     toast.show();
@@ -97,6 +93,7 @@ public class MainActivity extends FlutterActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         screenshot.onActivityResult(requestCode, resultCode, data);
     }
 }

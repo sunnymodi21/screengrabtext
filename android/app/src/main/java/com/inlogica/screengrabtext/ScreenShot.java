@@ -50,7 +50,6 @@ public class ScreenShot {
     private MethodChannel screenShotChannel;
     private int requestResult;
     private Intent mediaResultIntent;
-    private NotificationScreenShot notifyComplete;
     
     ScreenShot(Context context, MethodChannel screenShotFlutChannel){
         sContext = context;
@@ -95,8 +94,7 @@ public class ScreenShot {
                     String latestImagePath = STORE_DIRECTORY + "screenshot-" + dateNow + ".png";
                     fos = new FileOutputStream(latestImagePath);
                     bitmap.compress(CompressFormat.JPEG, 50, fos);
-                    screenShotChannel.invokeMethod("onScreenShot", latestImagePath); 
-                    notifyComplete.showNotification();
+                    screenShotChannel.invokeMethod("onScreenShot", latestImagePath);
                     stopProjection();
                     reader.close();
                     Log.i(TAG, "captured image: " + latestImagePath);
@@ -172,8 +170,7 @@ public class ScreenShot {
         }
     }
 
-    public void takeScreenShot( NotificationScreenShot notificationScreenShot){
-        notifyComplete = notificationScreenShot;
+    public void takeScreenShot(){
         sMediaProjection = mProjectionManager.getMediaProjection(requestResult, mediaResultIntent);
         if (sMediaProjection != null) {
             File externalFilesDir = sContext.getExternalFilesDir(null);

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:screengrabtext/screen_text_provider.dart';
 import 'package:screengrabtext/screen_text_row_widget.dart';
-import 'package:screengrabtext/detection_button.dart';
+import 'package:screengrabtext/detection_buttons.dart';
 
 class HistoryScreen extends StatelessWidget {
   final ScreenTextProvider screenTextDb = new ScreenTextProvider();
@@ -9,7 +9,7 @@ class HistoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Stack(
-      alignment: const Alignment(0.8, 0.9),
+      alignment: const Alignment(0.85, 0.9),
       children: <Widget>[
       FutureBuilder<List<ScreenText>>(
         future: screenTextDb.getAllScreenText(),

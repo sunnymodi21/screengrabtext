@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 
 import 'package:screengrabtext/detection_screen.dart';
-
 import 'package:screengrabtext/screen_text_provider.dart';
 
 class ScreenTextRow extends StatelessWidget {
@@ -37,13 +36,13 @@ class ScreenTextRow extends StatelessWidget {
       child: new Container(
         margin: new EdgeInsets.fromLTRB(40, 16, 20, 20),
         child: new Text(
-          screenText.text.length > 100
-              ? screenText.text.substring(0, 100) + '.....'
-              : screenText.text,
+          screenText.text,
           style: new TextStyle(
               color: Colors.white,
               fontSize: 12.0,
               fontWeight: FontWeight.w400),
+          maxLines:6,
+          overflow: TextOverflow.ellipsis,
         ),
       ),
     );
