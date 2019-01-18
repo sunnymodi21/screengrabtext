@@ -12,6 +12,14 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="ScreenGrabText"
         android:icon="@mipmap/ic_launcher">
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3841833216293587~3809148656"/>
+                    
+        <meta-data 
+            android:name="com.google.firebase.ml.vision.DEPENDENCIES"
+            android:value="ocr"/>
+            <!-- To use multiple models: android:value="ocr,label,barcode,face" -->
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -27,10 +35,6 @@
                 android:name="io.flutter.app.android.SplashScreenUntilFirstFrame"
                 android:value="true" />
             
-            <meta-data 
-                android:name="com.google.firebase.ml.vision.DEPENDENCIES"
-                android:value="ocr" />
-                <!-- To use multiple models: android:value="ocr,label,barcode,face" -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

@@ -2,12 +2,13 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:screengrabtext/screen_text_provider.dart';
 import 'package:screengrabtext/detection_screen.dart';
+import 'package:screengrabtext/text_detector.dart';
 
 class NotificationProvider {
-  ScreenText screenText;
   BuildContext context;
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   NotificationDetails platformChannelSpecifics;
+  ScreenText screenText;
 
   NotificationProvider(){
     flutterLocalNotificationsPlugin =
@@ -34,16 +35,14 @@ class NotificationProvider {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => DetectionScreen(
-              screenText: screenText,
-              fromHistory: false,
-            )),
+        builder: (context) => DetectionScreen(screenText)),
     );
   }
 
-  show(BuildContext mainContext, ScreenText mainScreenText){
+  show(BuildContext mainContext, String imagePath) async {
     context = mainContext;
-    screenText = mainScreenText;
+    TextDetector textDetector = new TextDetector();
+    screenText = await textDetector.detectText(imagePath);
     flutterLocalNotificationsPlugin.show(
     0, 'ScreenShot done', 'Click to copy', platformChannelSpecifics);
   }

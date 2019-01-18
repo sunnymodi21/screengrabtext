@@ -52,10 +52,7 @@ class ScreenTextRow extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => DetectionScreen(
-                    screenText: screenText,
-                    fromHistory: true,
-                  )),
+              builder: (context) => DetectionScreen(screenText)),
         );
       },
       child: new Container(
