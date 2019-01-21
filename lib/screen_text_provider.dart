@@ -48,7 +48,7 @@ class ScreenTextProvider {
   Future<ScreenText> insert(ScreenText screenText) async {
     await this.open();
     screenText.id = await db.insert(tableScreenText, screenText.toMap());
-    await this.close();
+    
     return screenText;
   }
 
@@ -57,7 +57,6 @@ class ScreenTextProvider {
     List<Map> elementScreenText = await db.query(tableScreenText,
         where: '$columnId = ?',
         whereArgs: [id]);
-    await this.close();
     if (elementScreenText.length > 0) {
       return ScreenText.fromMap(elementScreenText.first);
     }
@@ -67,7 +66,7 @@ class ScreenTextProvider {
   Future<List<ScreenText>> getAllScreenText() async {
     await this.open();
     List<Map> allScreenText = await db.query(tableScreenText, orderBy:columnId+' desc');
-    await this.close();
+    
     List<ScreenText> screenTextList = [];
     allScreenText.forEach((element) {
       screenTextList.add(ScreenText.fromMap(element));
@@ -78,7 +77,6 @@ class ScreenTextProvider {
   Future<int> delete(int id) async {
     await this.open();
     int result = await db.delete(tableScreenText, where: '$columnId = ?', whereArgs: [id]);
-    await this.close();
     return result;
   }
 
@@ -86,7 +84,6 @@ class ScreenTextProvider {
     await this.open();
     int result = await db.update(tableScreenText, screenText.toMap(),
         where: '$columnId = ?', whereArgs: [screenText.id]);
-    await this.close();
     return result;
   }
 

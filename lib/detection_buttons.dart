@@ -28,6 +28,5 @@ class DetectionButton extends StatelessWidget {
         new ScreenShotButton(_startScreenShot),
       ]
     );
-    //return new FloatActionButton();
   }
 }

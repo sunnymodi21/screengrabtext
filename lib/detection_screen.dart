@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:screengrabtext/screen_text_provider.dart';
 import 'package:screengrabtext/text_edit_header.dart';
 import 'package:screengrabtext/text_box.dart';
+import 'package:screengrabtext/ad_provider.dart';
 
 class DetectionScreen extends StatefulWidget {
   final ScreenText screenText;
@@ -20,6 +21,11 @@ class _DetectionScreenState extends State<DetectionScreen> {
 
   @override
   void initState() {
+    
+    AdProvider adProvider = new AdProvider();
+    var targetingInfo  = adProvider.initialize();
+    adProvider.loadInterstitial(targetingInfo);
+    //adProvider.showIntertitial();
     super.initState();
       setState(() {
         screenTextState = widget.screenText;
