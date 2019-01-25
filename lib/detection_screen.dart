@@ -25,7 +25,7 @@ class _DetectionScreenState extends State<DetectionScreen> {
     AdProvider adProvider = new AdProvider();
     var targetingInfo  = adProvider.initialize();
     adProvider.loadInterstitial(targetingInfo);
-    //adProvider.showIntertitial();
+    adProvider.showIntertitial();
     super.initState();
       setState(() {
         screenTextState = widget.screenText;
