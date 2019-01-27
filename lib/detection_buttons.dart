@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:screengrabtext/screen_shot.dart';
-import 'package:screengrabtext/screen_text_provider.dart';
 import 'package:screengrabtext/notification_provider.dart';
 import 'package:screengrabtext/image_pick_button.dart';
 import 'package:screengrabtext/screenshot_button.dart';
@@ -14,9 +13,7 @@ class DetectionButton extends StatelessWidget {
   }
 
   _onScreenShot(BuildContext context, String imagePath) {
-    ScreenText screenText = new ScreenText();
-    screenText.imagepath = imagePath;
-    notification.show(context, screenText);
+    notification.show(context, imagePath);
   }
 
   @override
@@ -31,6 +28,5 @@ class DetectionButton extends StatelessWidget {
         new ScreenShotButton(_startScreenShot),
       ]
     );
-    //return new FloatActionButton();
   }
 }

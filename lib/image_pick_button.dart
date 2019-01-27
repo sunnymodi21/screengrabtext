@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:screengrabtext/detection_screen.dart';
 import 'package:screengrabtext/screen_text_provider.dart';
+import 'package:screengrabtext/text_detector.dart';
 
 class ImagePickerButton extends StatefulWidget {
   final String option;
@@ -20,14 +21,12 @@ class _ImagePickerButtonState extends State<ImagePickerButton> {
     File image = await ImagePicker.pickImage(source: source);
     if(image!=null){      
       ScreenText screenText = new ScreenText();
-      screenText.imagepath = image.path;
+      TextDetector textDetector = new TextDetector();
+      screenText = await textDetector.detectText(image.path);
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => DetectionScreen(
-            screenText: screenText,
-            fromHistory: false,
-          )
+          builder: (context) => DetectionScreen(screenText)
         ),
       );
     }
