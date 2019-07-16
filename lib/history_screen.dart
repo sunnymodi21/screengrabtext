@@ -30,7 +30,6 @@ class _HistoryScreenState extends State<HistoryScreen> with WidgetsBindingObserv
       case AppLifecycleState.paused:
         break;
       case AppLifecycleState.resumed:
-        print('resume');
         ScreenTextProvider screenTextDb = new ScreenTextProvider();
         screenTextDb.getAllScreenText().then((historyData){
           var items = <Widget>[];
