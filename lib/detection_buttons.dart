@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:screengrabtext/screen_shot.dart';
 import 'package:screengrabtext/notification_provider.dart';
 import 'package:screengrabtext/image_pick_button.dart';
-import 'package:screengrabtext/screenshot_button.dart';
+// import 'package:screengrabtext/screenshot_button.dart';
 
 class DetectionButton extends StatelessWidget {
   final ScreenShot screenshot = new ScreenShot();
   final NotificationProvider notification = new NotificationProvider();
 
-  _startScreenShot() {
-    screenshot.startScreenShot();
-  }
+  // _startScreenShot() {
+  //   screenshot.startScreenShot();
+  // }
 
   _onScreenShot(BuildContext context, String imagePath) {
     notification.show(context, imagePath);
@@ -25,7 +25,7 @@ class DetectionButton extends StatelessWidget {
       children: <Widget>[
         new ImagePickerButton('camera'),
         new ImagePickerButton('gallery'),
-        new ScreenShotButton(_startScreenShot),
+        // new ScreenShotButton(_startScreenShot),
       ]
     );
   }

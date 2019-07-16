@@ -94,10 +94,10 @@ public class ScreenShot {
                     String latestImagePath = STORE_DIRECTORY + "screenshot-" + dateNow + ".png";
                     fos = new FileOutputStream(latestImagePath);
                     bitmap.compress(CompressFormat.JPEG, 50, fos);
-                    screenShotChannel.invokeMethod("onScreenShot", latestImagePath);
                     stopProjection();
                     reader.close();
                     Log.i(TAG, "captured image: " + latestImagePath);
+                    screenShotChannel.invokeMethod("onScreenShot", latestImagePath);
                 }
 
             } catch (Exception e) {
